@@ -16,27 +16,46 @@ export default function App() {
   const [pass, setPass] = useState("");
 
   const [regmes, setRegmes] = useState("");
+  const [login, setLogin] = useState(false);
 
   const handlePress = () => {
-    setRegmes(`Hello, ${first} ${last}! Thank you for registering!`);
+    if (login) {
+      setRegmes(`Welcome back!`);
+    }
+    if (!login) {
+      setRegmes(`Hello, ${first} ${last}! Thank you for registering!`);
+    }
+  };
+  const handleSwitch = () => {
+    if (login) {
+      setLogin(false);
+    }
+    if (!login) {
+      setLogin(true);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.paragraph}>Create an account</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => setFirst(text)}
-        value={first}
-        autoCapitalize={"words"}
-        placeholder="Enter your first name"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => setLast(text)}
-        value={last}
-        autoCapitalize={"words"}
-        placeholder="Enter your last name"
-      />
+      {!login && <Text style={styles.paragraph}>Create an account</Text>}
+      {login && <Text style={styles.paragraph}>Log In</Text>}
+      {!login && (
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setFirst(text)}
+          value={first}
+          autoCapitalize={"words"}
+          placeholder="Enter your first name"
+        />
+      )}
+      {!login && (
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setLast(text)}
+          value={last}
+          autoCapitalize={"words"}
+          placeholder="Enter your last name"
+        />
+      )}
 
       <TextInput
         style={styles.input}
@@ -50,13 +69,16 @@ export default function App() {
         onChangeText={(text) => setPass(text)}
         value={pass}
         autoCapitalize={"words"}
-        placeholder="Choose a password"
+        placeholder={login ? "Enter your password" : "Choose a password"}
       />
       <View style={styles.button}>
         <Button title="Confirm" onPress={handlePress} />
       </View>
       <View style={styles.button}>
-        <Button title="Switch to Login" onPress={handlePress} />
+        <Button
+          title={login ? "Create an account" : "Switch to Login"}
+          onPress={handleSwitch}
+        />
       </View>
       {regmes && <Text style={styles.paragraph}>{regmes}</Text>}
     </SafeAreaView>
